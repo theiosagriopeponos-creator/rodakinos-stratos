@@ -1,0 +1,396 @@
+{
+  "project": "Crowbar Escape",
+  "version": "design-1.0",
+  "host_game": "Sonic Adventure 2 (PC)",
+  "host_game_version": null,
+  "other_games": [
+    "Half-Life 2"
+  ],
+  "players": "solo only",
+  "legend": {
+    "null": "unfilled cell. Preflight must list every one; the build starts only when none are left that block it",
+    "status": {
+      "decided": "the user chose it",
+      "proposed": "a design suggestion the user has not confirmed",
+      "to_verify": "a candidate name or value that must be checked against the real game files",
+      "to_do": "nothing exists yet"
+    },
+    "references": "a cell that names another row (e.g. sound_swing -> sounds.id) must resolve to a real row in that sheet"
+  },
+  "sheets": [
+    {
+      "name": "characters",
+      "description": "Playable characters. One row per character swapped in.",
+      "columns": [
+        "id",
+        "role",
+        "replaces",
+        "model_source",
+        "model_target_format",
+        "skeleton_target",
+        "animations_required",
+        "voice_source",
+        "status",
+        "notes"
+      ],
+      "rows": [
+        {
+          "id": "gordon_freeman",
+          "role": "player",
+          "replaces": "Sonic (as played in City Escape)",
+          "model_source": "player's own Half-Life 2 install (its model files), converted on the player's PC",
+          "model_target_format": null,
+          "skeleton_target": "Sonic's rig in SA2 (animations must map onto it)",
+          "animations_required": [
+            "idle",
+            "run",
+            "jump",
+            "fall",
+            "land",
+            "hurt",
+            "death",
+            "crowbar_swing"
+          ],
+          "voice_source": null,
+          "status": "decided",
+          "notes": "Movement (run, jump, grind) stays exactly as Sonic's. Only the look, the attack and the sounds change. Open: Sonic's jump is a spin-ball pose. Decide Gordon's jump pose with the user."
+        }
+      ]
+    },
+    {
+      "name": "attacks",
+      "description": "Moves that change. One row per move.",
+      "columns": [
+        "id",
+        "replaces_move",
+        "replace_move_candidates",
+        "trigger_input",
+        "animation",
+        "hit_shape",
+        "hit_arc_degrees",
+        "reach",
+        "effect_on_enemy",
+        "effect_on_breakables",
+        "hitstop_ms",
+        "sound_swing",
+        "sound_hit",
+        "status",
+        "notes"
+      ],
+      "rows": [
+        {
+          "id": "crowbar_swing",
+          "replaces_move": "Homing Attack",
+          "replace_move_candidates": [
+            "Homing Attack",
+            "jump/spin attack",
+            "Spin Dash"
+          ],
+          "trigger_input": "same button as the replaced move",
+          "animation": "crowbar_swing",
+          "hit_shape": "arc in front of Gordon",
+          "hit_arc_degrees": 120,
+          "reach": null,
+          "effect_on_enemy": "defeats the enemy in one hit, using the game's existing Homing Attack hit logic",
+          "effect_on_breakables": null,
+          "hitstop_ms": null,
+          "sound_swing": "crowbar_swing",
+          "sound_hit": "crowbar_hit",
+          "status": "decided",
+          "notes": "User delegated the choice; recommended Homing Attack because it is the stage's main enemy-killing move. Version 1 aim: keep the game's lock-on movement and hit data, swap only Gordon's swing animation and the HL2 sounds. Agent must confirm this is feasible in the running game."
+        }
+      ]
+    },
+    {
+      "name": "enemies",
+      "description": "SA2's own City Escape enemies stay as they are (user choice); Gordon fights them. One row per enemy type found in the stage.",
+      "columns": [
+        "id",
+        "display_name",
+        "set_object_id",
+        "reaction_to_crowbar",
+        "death_sound",
+        "status",
+        "notes"
+      ],
+      "rows": [
+        {
+          "id": null,
+          "display_name": null,
+          "set_object_id": null,
+          "reaction_to_crowbar": null,
+          "death_sound": null,
+          "status": "to_do",
+          "notes": "Enumerate from the stage's object placement data and add one row per enemy type. Do not invent names."
+        }
+      ]
+    },
+    {
+      "name": "sounds",
+      "description": "Half-Life 2 sounds and music for the stage. Every candidate path must be checked against the real VPK contents.",
+      "columns": [
+        "id",
+        "event",
+        "hl2_source_candidate",
+        "replaces_sa2_sound",
+        "target_format",
+        "status"
+      ],
+      "rows": [
+        {
+          "id": "crowbar_swing",
+          "event": "crowbar swing",
+          "hl2_source_candidate": "weapons/iceaxe/iceaxe_swing1.wav",
+          "replaces_sa2_sound": null,
+          "target_format": null,
+          "status": "to_verify"
+        },
+        {
+          "id": "crowbar_hit",
+          "event": "crowbar hits enemy",
+          "hl2_source_candidate": "weapons/crowbar/crowbar_impact1.wav",
+          "replaces_sa2_sound": null,
+          "target_format": null,
+          "status": "to_verify"
+        },
+        {
+          "id": "ring_pickup",
+          "event": "ring collected",
+          "hl2_source_candidate": "items/smallmedkit1.wav",
+          "replaces_sa2_sound": null,
+          "target_format": null,
+          "status": "to_verify"
+        },
+        {
+          "id": "player_hurt",
+          "event": "Gordon takes damage",
+          "hl2_source_candidate": null,
+          "replaces_sa2_sound": null,
+          "target_format": null,
+          "status": "to_do"
+        },
+        {
+          "id": "player_death",
+          "event": "Gordon is defeated",
+          "hl2_source_candidate": null,
+          "replaces_sa2_sound": null,
+          "target_format": null,
+          "status": "to_do"
+        },
+        {
+          "id": "stage_music",
+          "event": "City Escape background music",
+          "hl2_source_candidate": null,
+          "replaces_sa2_sound": null,
+          "target_format": null,
+          "status": "to_do"
+        }
+      ]
+    },
+    {
+      "name": "hooks",
+      "description": "Places where the mod touches the game. Targets are unknown until the game files are inspected; never guess an address or file name.",
+      "columns": [
+        "id",
+        "purpose",
+        "route",
+        "target_in_game",
+        "how_to_find",
+        "depends_on",
+        "status"
+      ],
+      "rows": [
+        {
+          "id": "player_model",
+          "purpose": "show Gordon instead of Sonic",
+          "route": "file replacement if the model file can be swapped, otherwise a DLL hook",
+          "target_in_game": null,
+          "how_to_find": "inspect the game's resource folder for Sonic's model and motion files; check what the loader's file redirection supports",
+          "depends_on": [
+            "gordon_freeman"
+          ],
+          "status": "to_verify"
+        },
+        {
+          "id": "player_animations",
+          "purpose": "play Gordon's animations on Sonic's skeleton",
+          "route": null,
+          "target_in_game": null,
+          "how_to_find": "find the motion data format and which animation slots the character uses",
+          "depends_on": [
+            "gordon_freeman"
+          ],
+          "status": "to_do"
+        },
+        {
+          "id": "attack_state",
+          "purpose": "play crowbar_swing during the Homing Attack",
+          "route": "DLL hook on the character's action handling",
+          "target_in_game": null,
+          "how_to_find": "find Sonic's Homing Attack handling in the running game",
+          "depends_on": [
+            "crowbar_swing"
+          ],
+          "status": "to_do"
+        },
+        {
+          "id": "enemy_hit",
+          "purpose": "keep the Homing Attack's existing hit on SA2's enemies; the crowbar only changes the look and sound",
+          "route": "reuse the replaced move's hit data where possible",
+          "target_in_game": null,
+          "how_to_find": "confirm in the running game that the lock-on and hit still work with the new animation",
+          "depends_on": [
+            "crowbar_swing",
+            "enemies"
+          ],
+          "status": "to_do"
+        },
+        {
+          "id": "sound_swap",
+          "purpose": "play HL2 sounds for the listed events",
+          "route": null,
+          "target_in_game": null,
+          "how_to_find": "find where SA2 stores and triggers effects sounds",
+          "depends_on": [
+            "sounds"
+          ],
+          "status": "to_do"
+        },
+        {
+          "id": "music_swap",
+          "purpose": "play HL2 music in City Escape",
+          "route": null,
+          "target_in_game": null,
+          "how_to_find": "find the stage's music file and how the loader can redirect it",
+          "depends_on": [
+            "stage_music"
+          ],
+          "status": "to_do"
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "description": "Everything a player needs, and whether it can legally and technically ship in one click.",
+      "columns": [
+        "id",
+        "kind",
+        "source",
+        "license",
+        "shareable",
+        "needs_user",
+        "status",
+        "notes"
+      ],
+      "rows": [
+        {
+          "id": "sa2_mod_loader",
+          "kind": "loader",
+          "source": "https://github.com/X-Hax/SA-Mod-Manager (also the SA2 Mod Loader documented on Sonic Retro)",
+          "license": null,
+          "shareable": null,
+          "needs_user": false,
+          "status": "to_verify",
+          "notes": "Melty does not install a loader for SA2 by itself. Check game_info first; otherwise bundle it if its license allows, with credit."
+        },
+        {
+          "id": "mod_dll",
+          "kind": "our code",
+          "source": "built in this project",
+          "license": "MIT",
+          "shareable": true,
+          "needs_user": true,
+          "status": "to_do",
+          "notes": "License is the user's choice. Includes the asset converter."
+        },
+        {
+          "id": "gordon_model_assets",
+          "kind": "assets",
+          "source": "player's own Half-Life 2 install",
+          "license": "Valve content; not redistributed, stays on the player's PC",
+          "shareable": false,
+          "needs_user": false,
+          "status": "decided",
+          "notes": "Needs a converter that runs on the player's PC (HL2 model/sound formats -> SA2 formats), shipped as our own code. Open technical check: run one_click_check to confirm Melty accepts a pre-launch or first-launch conversion step. If it does not, tell the user before building."
+        },
+        {
+          "id": "hl2_sounds_music",
+          "kind": "assets",
+          "source": "player's own Half-Life 2 install",
+          "license": "Valve content; not redistributed, stays on the player's PC",
+          "shareable": false,
+          "needs_user": false,
+          "status": "decided",
+          "notes": "Needs a converter that runs on the player's PC (HL2 model/sound formats -> SA2 formats), shipped as our own code. Open technical check: run one_click_check to confirm Melty accepts a pre-launch or first-launch conversion step. If it does not, tell the user before building."
+        },
+        {
+          "id": "hl2_required",
+          "kind": "required game",
+          "source": "decided: yes, Half-Life 2 is a required game",
+          "license": null,
+          "shareable": null,
+          "needs_user": false,
+          "status": "decided",
+          "notes": "Set Half-Life 2 as a required game on the listing; Melty passes its folder at launch."
+        },
+        {
+          "id": "gameplay_screenshot",
+          "kind": "media",
+          "source": "capture of the finished mod running in SA2",
+          "license": null,
+          "shareable": true,
+          "needs_user": false,
+          "status": "decided",
+          "notes": "The agent captures it on the user's PC once the mod runs: game window only, showing Gordon's crowbar swing in City Escape. No private windows, no tokens. If capture tools are unavailable, say exactly what is missing and ask for the smallest action."
+        }
+      ]
+    },
+    {
+      "name": "listing",
+      "description": "Melty page fields. Suggestions only until the build exists and the user chooses.",
+      "columns": [
+        "id",
+        "value",
+        "status"
+      ],
+      "rows": [
+        {
+          "id": "title",
+          "value": "Crowbar Escape",
+          "status": "decided"
+        },
+        {
+          "id": "tagline",
+          "value": "Run City Escape as Gordon Freeman, crowbar in hand.",
+          "status": "proposed"
+        },
+        {
+          "id": "description",
+          "value": "Sonic Adventure 2's City Escape, starring Gordon Freeman. Run down the stage as Gordon, swing a crowbar through the robots, and hear Half-Life 2's sounds and music along the way. Single player.",
+          "status": "proposed"
+        },
+        {
+          "id": "credits",
+          "value": "Valve (Half-Life 2); Sega / Sonic Team (Sonic Adventure 2); the authors of the SA2 Mod Loader / SA Mod Manager; the mod's author (my Melty account name unless I say otherwise)",
+          "status": "proposed"
+        },
+        {
+          "id": "content_license",
+          "value": "MIT, for the mod's own code only. Valve and Sega content stays theirs and is not included.",
+          "status": "decided"
+        },
+        {
+          "id": "remix_allowed",
+          "value": true,
+          "status": "decided"
+        }
+      ]
+    }
+  ],
+  "required_games": [
+    "Sonic Adventure 2 (host)",
+    "Half-Life 2"
+  ],
+  "asset_route": "decided: Gordon's look and the HL2 sounds/music are read from the player's own Half-Life 2 install. No Valve files ship in the release.",
+  "build_status": "decided: no build exists yet. The coding agent builds and tests it on the user's PC. Everything is design-only until then."
+}
